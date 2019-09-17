@@ -93,7 +93,7 @@ public class settings extends AppCompatActivity implements
 
                 }
                 else
-                    Toast.makeText(getApplicationContext(),"Please fill all the fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Please fill the field", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -116,7 +116,7 @@ public class settings extends AppCompatActivity implements
 
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,  R.style.MyDialogTheme);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

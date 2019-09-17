@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bk"
     tools:context=".SetAlarm">
 
     <LinearLayout
@@ -36,6 +37,8 @@
         <Button
             android:layout_width="wrap_content"
             android:gravity="center"
+            android:background="@drawable/c_diag"
+            android:textColor="@color/colorWhite"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:layout_height="wrap_content"

@@ -147,7 +147,7 @@ public class LocPicker extends AbstractMapActivity implements
     @Override
     public void onBackPressed() {
 
-        AlertDialog.Builder box = new AlertDialog.Builder(this);
+        AlertDialog.Builder box = new AlertDialog.Builder(this, R.style.MyDialogTheme);
         box.setTitle("Use the dropped location ?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

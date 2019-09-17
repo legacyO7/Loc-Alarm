@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bk"
     tools:context=".settings">
 
     <LinearLayout
@@ -17,6 +18,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="To : Unknown Location"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -37,14 +39,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Alarm Distance : " />
+                android:text="Alarm Distance : "
+                android:textSize="20dp" />
 
             <EditText
                 android:id="@+id/alarmdistance"
                 android:layout_width="114dp"
-                android:inputType="number"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
         </LinearLayout>
 
@@ -60,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="20dp"
-                android:text="Alarm Mode : " />
+                android:text="Alarm Mode : "
+                android:textSize="20dp" />
 
             <Spinner
                 android:id="@+id/alarmmode"
@@ -74,15 +76,17 @@
         </LinearLayout>
 
         <CheckBox
-            android:layout_marginTop="60dp"
             android:id="@+id/setalarmbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
             android:text="Set Alarm" />
 
         <Button
             android:id="@+id/apply"
             android:layout_width="wrap_content"
+            android:background="@drawable/c_diag"
+            android:textColor="@color/colorWhite"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:text="apply" />

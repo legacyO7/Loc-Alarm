@@ -1,18 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/bkma"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="L-alarm"
+        android:layout_marginTop="35dp"
+        android:gravity="center|top"
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/locationalarm"
-        android:layout_width="wrap_content"
+        android:layout_width="151dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="127dp"
-        android:layout_marginBottom="474dp"
+        android:layout_marginBottom="473dp"
+        android:background="@drawable/c_diag"
         android:gravity="center"
-        android:text="Location Alarm" />
+        android:text="GPS Alarm"
+        android:textColor="@color/colorWhite" />
 
 
 </RelativeLayout>
