@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MapsV2 Drag</string>
+    <string name="app_name">L-Alarm</string>
     <string name="legal">Legal Notices</string>
     <string name="no_maps">Google Maps V2 not available!</string>
     <string name="normal">Normal</string>
@@ -11,7 +11,7 @@
     <string name="rc">RaceCource</string>
     <string name="race_course">Race Course Road</string>
     <string name="majestic">Marker</string>
-    <string name="majestic_snippet">Dropped Marker</string>
+    <string name="majestic_snippet">Drag the marker to destination</string>
     <string name="chickpet">ChickPet</string>
     <string name="chickpet_street">Way to Chickpet Street</string>
     <string name="bangalore_railway_station">Bangalore Railway Station</string>

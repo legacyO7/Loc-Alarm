@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -33,6 +34,9 @@ public class GoogleService extends Service implements LocationListener {
 
     boolean isGPSEnable = false;
     boolean isNetworkEnable = false;
+    String alarmmode;
+    int alarmdist;
+    SharedPreferences sharedPreferences;
     double latitude, longitude, targetlatitude, targetlongitude;
     LocationManager locationManager;
     Location location;
@@ -41,8 +45,9 @@ public class GoogleService extends Service implements LocationListener {
     long notify_interval = 1000;
     public static String str_receiver = "servicetutorial.service.receiver";
     Intent intent;
-    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+    Uri notification;
     Ringtone r;
+
     public GoogleService() {
 
     }
@@ -57,6 +62,19 @@ public class GoogleService extends Service implements LocationListener {
     public void onCreate() {
         super.onCreate();
 
+        sharedPreferences = getSharedPreferences("l-alarm", MODE_PRIVATE);
+        alarmdist =Integer.parseInt (sharedPreferences.getString("ringdistance", "0.0"))*1000;
+        Log.d("aaaa", String.valueOf(alarmdist));
+        targetlatitude =Double.parseDouble(sharedPreferences.getString("latitude", "0.0"));
+        targetlongitude =Double.parseDouble(sharedPreferences.getString("longitude", "0.0"));
+        alarmmode = sharedPreferences.getString("ringmode", "0.0");
+        if (alarmmode.equals("NotificationTone")) {
+            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        } else if (alarmmode.equals("AlarmTone")) {
+            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        } else {
+            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        }
         mTimer = new Timer();
         mTimer.schedule(new TimerTaskToGetLocation(), 5, notify_interval);
         intent = new Intent(str_receiver);
@@ -157,13 +175,6 @@ public class GoogleService extends Service implements LocationListener {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        targetlatitude = Double.parseDouble(intent.getStringExtra("targlat"));
-        targetlongitude = Double.parseDouble(intent.getStringExtra("targlong"));
-        return START_STICKY;
-    }
-
-    @Override
     public void onDestroy() {
         r.stop();
     }
@@ -182,10 +193,11 @@ public class GoogleService extends Service implements LocationListener {
 
 
         double distance = startPoint.distanceTo(endPoint);
-        if (distance < 1000 || distance < 500 || distance < 100) {
-
-               r.play();
+        Log.d("bbbb", String.valueOf(distance));
+        if (distance < alarmdist || distance < alarmdist / 2 || distance < 100 ) {
+            r.play();
         }
+        //r.play();
         sendBroadcast(intent);
     }
 

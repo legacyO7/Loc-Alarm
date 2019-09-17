@@ -13,15 +13,11 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +28,11 @@ import android.widget.Toast;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,19 +40,14 @@ import java.util.Locale;
 
 public class SetAlarm extends Activity {
     Button btn_stop;
-    int destroyed=0;
     private static final int REQUEST_PERMISSIONS = 100;
-    boolean boolean_permission = true;
-    SharedPreferences mPref;
-    SharedPreferences.Editor medit;
-    Bundle b;
+    SharedPreferences mPref, sharedPreferences;
+    SharedPreferences.Editor medit, spedit;
     TextView setalarmdisplay;
     Double latitude, longitude, targetlatitude, targetlongitude;
     Geocoder geocoder;
     ProgressBar pd;
-    private int requestCode;
-    private String[] permissions;
-    private int[] grantResults;
+    int ison;
 
 
     @Override
@@ -65,59 +59,45 @@ public class SetAlarm extends Activity {
         geocoder = new Geocoder(this, Locale.getDefault());
         mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         medit = mPref.edit();
-        pd=findViewById(R.id.pd);
-        b = new Bundle();
-        b = getIntent().getExtras();
-
+        pd = findViewById(R.id.pd);
         Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new MultiplePermissionsListener() {
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new PermissionListener() {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        // check if all permissions are granted
-                        if (report.areAllPermissionsGranted()) {
-                            // do you work now
-                            medit.putString("service", "service").commit();
-                            assert b != null;
-                            {
-                                Log.d("bundldlde", b.getDouble("lat") + " " + b.getDouble("lon"));
-                                targetlongitude = b.getDouble("lon");
-                                targetlatitude = b.getDouble("lat");
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
 
-                            }
+                        medit.putString("service", "service").commit();
 
+                        sharedPreferences = getSharedPreferences("l-alarm", MODE_PRIVATE);
+                        targetlatitude = Double.parseDouble(sharedPreferences.getString("latitude", "0.0"));
+                        targetlongitude = Double.parseDouble(sharedPreferences.getString("longitude", "0.0"));
+                        ison = Integer.parseInt(sharedPreferences.getString("isset", "0.0"));
+
+                        if (ison == 1) {
                             Intent intent = new Intent(getApplicationContext(), GoogleService.class);
-                            intent.putExtra("targlat",String.valueOf(targetlatitude));
-                            intent.putExtra("targlong",String.valueOf(targetlongitude));
-                            if(destroyed==0)
+                            Toast.makeText(getApplicationContext(),"Alarm service started successfully", Toast.LENGTH_LONG).show();
                             startService(intent);
+
+                        } else {
+                            setalarmdisplay.setText("Alarm isnt set. Unable to start service \n:(");
                         }
 
-                        // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            // permission is denied permenantly, navigate user to app settings
-                        }
+
                     }
 
                     @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                        openSettings();
 
                     }
 
-                })
-                .onSameThread()
-                .check();
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
 
-        assert b != null;
-        {
-            Log.d("bundldlde", b.getDouble("lat") + " " + b.getDouble("lon"));
-            targetlongitude = b.getDouble("lon");
-            targetlatitude = b.getDouble("lat");
-
-        }
 
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,36 +107,24 @@ public class SetAlarm extends Activity {
                 Toast.makeText(getApplicationContext(), "Alarm Stopped", Toast.LENGTH_LONG).show();
                 Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
                 int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager)getApplication().getSystemService(Context.ALARM_SERVICE);
+                PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
                 mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                 System.exit(0);
             }
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        this.requestCode = requestCode;
-        this.permissions = permissions;
-        this.grantResults = grantResults;
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
+    private void openSettings() {
+        Intent intent = new Intent();
+        intent.setAction(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package",
+                BuildConfig.APPLICATION_ID, null);
+        intent.setData(uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
-
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -188,7 +156,7 @@ public class SetAlarm extends Activity {
             double distance = startPoint.distanceTo(endPoint);
             String[] separated = cityName.split(",");
             pd.setVisibility(View.INVISIBLE);
-            setalarmdisplay.setText(separated[0] + " is approximately " +String.format("%.3f", distance/1000) + "km away");
+            setalarmdisplay.setText(separated[0] + " is approximately " + String.format("%.3f", distance / 1000) + "km away");
            /* if (distance < 1000 || distance < 500 || distance < 100) {
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
