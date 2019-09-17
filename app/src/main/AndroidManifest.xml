@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.legacy07.lalarm">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -9,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BODY_SENSORS"/>
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -19,8 +22,14 @@
         android:roundIcon="@drawable/ic_alarm"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".settings"></activity>
-        <activity android:name=".SetAlarm" />
+        <service
+            android:name=".services.gyroservice"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".gyro.gyro_alarm" />
+        <activity android:name=".settings" />
+        <activity android:name=".gpsalarm.SetAlarm" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -38,7 +47,7 @@
             android:value="@string/google_maps_key" />
 
         <service
-            android:name=".GoogleService"
+            android:name=".services.GoogleService"
             android:enabled="true"
             android:exported="true" />
 
@@ -49,8 +58,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocPicker" />
-        <activity android:name=".AbstractMapActivity" />
+        <activity android:name=".gpsalarm.LocPicker" />
+        <activity android:name=".gpsalarm.AbstractMapActivity" />
     </application>
 
 </manifest>

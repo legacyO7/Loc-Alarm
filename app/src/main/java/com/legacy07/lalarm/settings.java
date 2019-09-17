@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
-import android.media.Ringtone;
-import android.provider.AlarmClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +17,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.legacy07.lalarm.gpsalarm.SetAlarm;
 
 
 public class settings extends AppCompatActivity implements

@@ -12,7 +12,7 @@
     https://commonsware.com/Android
  */
 
-package com.legacy07.lalarm;
+package com.legacy07.lalarm.gpsalarm;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.legacy07.lalarm.R;
 
 public class AbstractMapActivity extends Activity {
   static final String TAG_ERROR_DIALOG_FRAGMENT="errorDialog";

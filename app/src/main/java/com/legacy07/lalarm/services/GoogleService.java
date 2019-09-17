@@ -1,4 +1,4 @@
-package com.legacy07.lalarm;
+package com.legacy07.lalarm.services;
 
 import android.Manifest;
 import android.app.Service;

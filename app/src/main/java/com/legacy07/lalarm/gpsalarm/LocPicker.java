@@ -12,10 +12,9 @@
  https://commonsware.com/Android
  */
 
-package com.legacy07.lalarm;
+package com.legacy07.lalarm.gpsalarm;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -36,6 +34,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.legacy07.lalarm.MainActivity;
+import com.legacy07.lalarm.R;
+import com.legacy07.lalarm.settings;
 
 import java.io.IOException;
 import java.util.List;
@@ -162,10 +163,16 @@ public class LocPicker extends AbstractMapActivity implements
                         List<Address> addresses = null;
                         try {
                             String cityName;
+                            String[] separated = new String[0];
                             addresses = geocoder.getFromLocation(finallat, finallong, 1);
                             cityName = addresses.get(0).getLocality();
-                            String[] separated = cityName.split(",");
-                            editor.putString("location","To : "+ separated[0]);
+                            if (cityName!=null) {
+                                separated = cityName.split(",");
+                                editor.putString("location", "To : " + separated[0]);
+                            }
+                            else{
+                                editor.putString("location", "To : " + separated[0]);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

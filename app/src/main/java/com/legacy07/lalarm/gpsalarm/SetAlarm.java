@@ -1,4 +1,4 @@
-package com.legacy07.lalarm;
+package com.legacy07.lalarm.gpsalarm;
 
 import android.*;
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,7 +17,6 @@ import android.preference.PreferenceManager;
 
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -26,13 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.legacy07.lalarm.BuildConfig;
+import com.legacy07.lalarm.MainActivity;
+import com.legacy07.lalarm.R;
+import com.legacy07.lalarm.services.GoogleService;
 
 import java.io.IOException;
 import java.util.List;
@@ -157,11 +157,7 @@ public class SetAlarm extends Activity {
             String[] separated = cityName.split(",");
             pd.setVisibility(View.INVISIBLE);
             setalarmdisplay.setText(separated[0] + " is approximately " + String.format("%.3f", distance / 1000) + "km away");
-           /* if (distance < 1000 || distance < 500 || distance < 100) {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                r.play();
-            }*/
+
         }
     };
 
